@@ -8,9 +8,8 @@ function palindrom(string){
     if (string===reversedString){
         return ("gg")
     }
-    else {
-        return reversedString
-    }
+
+    return reversedString
 }
 
 class Ohce{
@@ -18,20 +17,27 @@ class Ohce{
         this.date=date
     }
 
-    run(){
-        return getGreetings(this.date.getHours())
+    on=false;
+
+    run(string){
+        if (string==="start"){
+            this.on=true;
+            return getGreetings(this.date.getHours())
+        }
+
+        if(!this.on) return "erreur"
+
+        if (string === 'stop') return "aurevoir"
+
+        return palindrom(string)
     }
+
+
 }
 
 function getGreetings(n){
-
-    if (n<20){
-        return "bonjour"
-    }
-    else {
-        return "bonsoir"
-    }
-
+    if (n<20) return "bonjour"
+    return "bonsoir"
 }
 
 class MockDate{
@@ -42,6 +48,8 @@ class MockDate{
         this.hour=hour
     }
 }
+
+
 
 test('reverse("allo") retourne olla ',()=>{
     expect(reverse("allo")).toBe("olla")
@@ -80,3 +88,31 @@ test('ohce.run(start) retourn bonjour à 21 heure',()=>{
 })
 
 
+test('ohce.run(stop) retourn erreur si pas de start préalable' ,()=>{
+    let ohce=new Ohce(new MockDate(21))
+    expect(ohce.run("stop")).toBe("erreur")
+})
+
+test('ohce.run(stop) retourn aurevoir si start préalable' ,()=>{
+    let ohce=new Ohce(new MockDate(21))
+    ohce.run("start")
+    expect(ohce.run("stop")).toBe("aurevoir")
+})
+
+test('ohce.run(bonjour) retourn erreur si pas de start préalable' ,()=>{
+    let ohce=new Ohce(new MockDate(21))
+
+    expect(ohce.run("bonjour")).toBe("erreur")
+})
+
+test('ohce.run(bonjour) retourn ruojnob si start préalable' ,()=>{
+    let ohce=new Ohce(new MockDate(21))
+    ohce.run("start")
+    expect(ohce.run("bonjour")).toBe("ruojnob")
+})
+
+test('ohce.run(ici) retourn gg si start préalable' ,()=>{
+    let ohce=new Ohce(new MockDate(21))
+    ohce.run("start")
+    expect(ohce.run("ici")).toBe("gg")
+})
